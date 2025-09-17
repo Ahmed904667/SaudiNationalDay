@@ -385,7 +385,7 @@
         @media (max-width: 480px) {
             .header {
                 padding: 12px;
-                margin-bottom: 5px;
+                margin-bottom: 120px;
             }
             
             .logo {
@@ -425,18 +425,18 @@
             
             /* Modal responsive for mobile - avoid browser search bar */
             .modal {
-                padding: 60px 10px 120px 10px; /* Top padding for status bar, bottom for browser controls */
+                padding: 20px 5px 40px 5px; /* Minimal padding for maximum space */
             }
             
             .modal-content {
-                max-width: calc(100% - 20px);
-                max-height: calc(100vh - 180px); /* Account for browser UI */
-                padding: 15px;
+                max-width: calc(100% - 10px);
+                max-height: calc(100vh - 70px); /* Account for minimal padding */
+                padding: 5px;
                 margin: 0;
             }
             
             .modal-image {
-                max-height: calc(60vh - 60px); /* Ensure space for actions */
+                max-height: calc(60vh - 20px); /* Ensure space for actions */
                 max-width: 100%;
                 border-radius: 15px;
             }
