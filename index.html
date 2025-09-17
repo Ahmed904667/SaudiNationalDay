@@ -345,6 +345,25 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
         
+        /* Large Desktop and below - apply logo left, title right layout */
+        @media (max-width: 1200px) {
+            .logo {
+                height: 160px;
+                top: 20px;
+                left: 20px;
+            }
+            
+            .page-title {
+                top: 20px;
+                left: auto;
+                right: 20px;
+                transform: none;
+                max-width: 65%;
+                height: auto;
+                max-height: 160px;
+            }
+        }
+        
         /* Large Desktop */
         @media (min-width: 1200px) {
             .card {
@@ -367,20 +386,58 @@
             }
         }
         
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                padding: 15px;
-                margin-bottom: 120px;
-            }
-            
+        /* Desktop/Tablet (992px - 1199px) */
+        @media (min-width: 992px) and (max-width: 1199px) {
             .logo {
-                display: none;
+                height: 140px;
+                top: 18px;
+                left: 18px;
             }
             
             .page-title {
-                top: 15px;
-                max-width: 100%;
+                top: 18px;
+                right: 18px;
+                max-width: 62%;
+                max-height: 140px;
+            }
+        }
+        
+        /* Tablet (768px - 991px) */
+        @media (min-width: 768px) and (max-width: 991px) {
+            .logo {
+                height: 120px;
+                top: 16px;
+                left: 16px;
+            }
+            
+            .page-title {
+                top: 16px;
+                right: 16px;
+                max-width: 58%;
+                max-height: 120px;
+            }
+        }
+        
+        /* Mobile/Tablet (max-width: 768px) */
+        @media (max-width: 768px) {
+            .header {
+                padding: 40px;
+                margin-bottom: 1px;
+            }
+            
+            .logo {
+                height: 100px;
+                top: 40px;
+                left: 15px;
+            }
+            
+            .page-title {
+                top: 40px;
+                left: auto;
+                right: 15px;
+                transform: none;
+                max-width: 60%;
+                max-height: 100px;
             }
             
             .main {
@@ -435,17 +492,26 @@
         
         @media (max-width: 480px) {
             .header {
-                padding: 12px;
-                margin-bottom: 120px;
+                padding-top: 40px;
+                padding-bottom: 40px;
+                padding-left: 40px;
+                padding-right: 40px;
+                margin-bottom: 1px;
             }
             
             .logo {
-                height: 100px;
+                height: 90px;
+                top: 40px;
+                left: 12px;
             }
             
             .page-title {
-                top: 12px;
-                max-width: 70%;
+                top: 40px;
+                left: auto;
+                right: 12px;
+                transform: none;
+                max-width: 55%;
+                max-height: 90px;
             }
             
             .main {
@@ -474,66 +540,96 @@
                 border-radius: 35px;
             }
             
-            /* Modal responsive for mobile - optimized layout */
+            /* Modal responsive for mobile - full screen image */
             .modal {
                 padding: 0;
-                align-items: flex-start;
-                /* Override safe areas for full control */
-                padding-top: 0;
-                padding-bottom: 0;
-                padding-left: 0;
-                padding-right: 0;
+                align-items: center;
+                justify-content: center;
             }
             
             .modal-content {
                 max-width: 100%;
-                max-height: 100dvh;
-                max-height: 100vh; /* Fallback */
-                padding: 10px;
+                max-height: 100%;
+                padding: 0;
                 margin: 0;
                 display: flex;
-                flex-direction: column;
-                justify-content: flex-start;
                 align-items: center;
-                min-height: 100dvh;
-                min-height: 100vh; /* Fallback */
-                /* Mobile safe areas for content */
-                padding-top: calc(env(safe-area-inset-top) + 20px);
-                padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
-                padding-left: calc(env(safe-area-inset-left) + 10px);
-                padding-right: calc(env(safe-area-inset-right) + 10px);
+                justify-content: center;
+                position: relative;
+                width: 100vw;
+                height: 100dvh;
+                height: 100vh; /* Fallback */
             }
             
             .modal-image {
-                max-height: calc(70dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-                max-height: 70vh; /* Fallback */
-                max-width: 100%;
-                width: auto;
+                width: 100%;
                 height: auto;
-                object-fit: contain;
-                border-radius: 15px;
-                margin-bottom: 20px;
+                max-height: 100%;
+                object-fit: cover;
+                border-radius: 0;
+                display: block;
             }
             
+            /* Close button - top right (top left in RTL) */
+            .close-btn {
+                position: absolute;
+                top: calc(env(safe-area-inset-top) + 70px);
+                top: 70px; /* Fallback */
+                right: calc(env(safe-area-inset-right) + 1px);
+                right: 1px; /* Fallback - will be left in RTL */
+                background: transparent;
+                border: none;
+                width: 50px;
+                height: 50px;
+                color: white;
+                font-size: 30px;
+                font-weight: bold;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1002;
+                transition: all 0.3s ease;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            }
+            
+            .close-btn:hover {
+                transform: scale(1.2);
+                text-shadow: 2px 2px 8px rgba(0, 0, 0, 1);
+            }
+            
+            /* Action buttons - bottom left */
             .modal-actions {
-                margin-top: 0;
-                padding: 15px 20px;
+                position: absolute;
+                bottom: calc(env(safe-area-inset-bottom) + 90px);
+                bottom: 90px; /* Fallback - more margin from bottom */
+                left: calc(env(safe-area-inset-left) + 20px);
+                left: 20px; /* Fallback */
+                display: flex;
+                flex-direction: column;
                 gap: 15px;
-                flex-wrap: wrap;
-                background: rgba(0, 0, 0, 0.6);
-                border-radius: 25px;
-                backdrop-filter: blur(15px);
-                width: 100%;
-                max-width: 300px;
+                z-index: 1002;
             }
             
             .action-btn {
-                padding: 12px 20px;
-                font-size: 14px;
-                border-radius: 25px;
-                min-width: 100px;
-                flex: 1;
-                max-width: 150px;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: transparent;
+                border: none;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            }
+            
+            .action-btn:hover {
+                transform: scale(1.2);
+                text-shadow: 2px 2px 8px rgba(0, 0, 0, 1);
             }
         }
     </style>
@@ -560,22 +656,20 @@
     </main>
     
     <!-- Modal -->
-    <div id="modal" class="modal" onclick="closeModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
+    <div id="modal" class="modal">
+        <div class="modal-content">
             <div class="modal-loading-overlay" id="modalLoading" style="display: none;">
                 <div class="modal-loading">💚</div>
             </div>
             <img id="modalImage" class="modal-image" src="" alt="Mood Image">
             
+            <!-- Close button -->
+            <button class="close-btn" onclick="closeModal()">×</button>
+            
+            <!-- Action buttons -->
             <div class="modal-actions">
-                <button class="action-btn" onclick="saveImage()">
-                    <span>💾</span>
-                    <span>حفظ</span>
-                </button>
-                <button class="action-btn" onclick="shareImage()">
-                    <span>📤</span>
-                    <span>مشاركة</span>
-                </button>
+                <button class="action-btn" onclick="saveImage()">💾</button>
+                <button class="action-btn" onclick="shareImage()">📤</button>
             </div>
         </div>
     </div>
