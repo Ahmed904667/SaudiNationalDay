@@ -50,19 +50,19 @@
             position: relative;
             width: 100%;
             padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
             margin-bottom: 20px;
+            height: 180px; /* Fixed height for positioning */
         }
         
         .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px; /* Force logo to left side */
             width: auto;
             height: 140px;
             opacity: 0;
             transform: translateY(-20px);
             animation: logoSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
-            flex-shrink: 0;
         }
         
         .page-title {
@@ -74,11 +74,6 @@
             height: auto;
             opacity: 0;
             animation: titleFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
-        }
-        
-        .header-spacer {
-            width: 140px;
-            flex-shrink: 0;
         }
         
         @keyframes logoSlideIn {
@@ -262,6 +257,47 @@
         
         .modal-image.loaded {
             transform: scale(1);
+        }
+        
+        /* Loading heart animation */
+        .modal-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            z-index: 1001;
+            animation: heartBeat 1.2s ease-in-out infinite;
+        }
+        
+        @keyframes heartBeat {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            25% {
+                transform: translate(-50%, -50%) scale(1.3);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            75% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+        }
+        
+        .modal-loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
         }
         
         
@@ -507,7 +543,6 @@
     <header class="header">
         <img src="BackgroundElements/Logo.png" alt="Logo" class="logo">
         <img src="BackgroundElements/Title.png" alt="Title" class="page-title">
-        <div class="header-spacer"></div>
     </header>
     
     <!-- Main Content -->
@@ -527,6 +562,9 @@
     <!-- Modal -->
     <div id="modal" class="modal" onclick="closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-loading-overlay" id="modalLoading" style="display: none;">
+                <div class="modal-loading">💚</div>
+            </div>
             <img id="modalImage" class="modal-image" src="" alt="Mood Image">
             
             <div class="modal-actions">
@@ -556,10 +594,12 @@
             const modal = document.getElementById('modal');
             const modalContent = modal.querySelector('.modal-content');
             const modalActions = modal.querySelector('.modal-actions');
+            const modalLoading = document.getElementById('modalLoading');
             const image = document.getElementById('modalImage');
             
-            // Show modal
+            // Show modal with loading
             modal.style.display = 'flex';
+            modalLoading.style.display = 'flex';
             
             // Start animations
             setTimeout(() => {
@@ -567,8 +607,19 @@
                 modalContent.classList.add('show');
             }, 10);
             
-            // Load image with animation
+            // Load image with beating heart animation
             image.onload = function() {
+                // Hide loading after image loads
+                modalLoading.style.display = 'none';
+                setTimeout(() => {
+                    image.classList.add('loaded');
+                    modalActions.classList.add('show');
+                }, 100);
+            };
+            
+            image.onerror = function() {
+                // Hide loading even on error
+                modalLoading.style.display = 'none';
                 setTimeout(() => {
                     image.classList.add('loaded');
                     modalActions.classList.add('show');
@@ -583,6 +634,7 @@
             const modal = document.getElementById('modal');
             const modalContent = modal.querySelector('.modal-content');
             const modalActions = modal.querySelector('.modal-actions');
+            const modalLoading = document.getElementById('modalLoading');
             const image = document.getElementById('modalImage');
             
             // Start close animations
@@ -590,6 +642,7 @@
             modalContent.classList.remove('show');
             modalActions.classList.remove('show');
             image.classList.remove('loaded');
+            modalLoading.style.display = 'none';
             
             // Hide modal after animation
             setTimeout(() => {
