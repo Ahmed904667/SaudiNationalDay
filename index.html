@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كيف تشعر اليوم؟</title>
+    
+    <!-- Cairo Font -->
+    <style>
+        @font-face {
+            font-family: 'Cairo';
+            src: url('Font/Cairo Fonts/Cairo-Regular.ttf') format('truetype');
+            font-weight: normal;
+        }
+        @font-face {
+            font-family: 'Cairo';
+            src: url('Font/Cairo Fonts/Cairo-Bold.ttf') format('truetype');
+            font-weight: bold;
+        }
+        @font-face {
+            font-family: 'Cairo';
+            src: url('Font/Cairo Fonts/Cairo-SemiBold.ttf') format('truetype');
+            font-weight: 600;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-image: url('Background.svg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-color: #00333b;
+        }
+        
+        .container {
+            text-align: center;
+            background: rgba(0, 40, 46, 0.6);
+            padding: 80px 50px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 40, 46, 0.4);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg, 
+                rgba(0, 40, 46, 0.15) 0%, 
+                rgba(0, 30, 35, 0.1) 25%,
+                rgba(0, 40, 46, 0.12) 50%,
+                rgba(0, 30, 35, 0.08) 75%,
+                rgba(0, 40, 46, 0.15) 100%
+            );
+            border-radius: 30px;
+            pointer-events: none;
+        }
+        
+        .container::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.1),
+                rgba(0, 51, 59, 0.2),
+                rgba(255, 255, 255, 0.05),
+                rgba(0, 51, 59, 0.15)
+            );
+            border-radius: 31px;
+            z-index: -1;
+            opacity: 0.6;
+        }
+        
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 60px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .mood-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .mood-option {
+            background: rgba(0, 51, 59, 0.3);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 25px 20px;
+            border-radius: 20px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-family: 'Cairo', sans-serif;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 51, 59, 0.2);
+            backdrop-filter: blur(15px) saturate(150%);
+            -webkit-backdrop-filter: blur(15px) saturate(150%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Animated border effect */
+        .mood-option::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 3px solid transparent;
+            border-radius: 22px;
+            background: linear-gradient(45deg, #03894a, #03894a) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: exclude;
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .mood-option.animate-border::after {
+            opacity: 1;
+            transform: scale(1);
+            animation: borderPulse 1.5s ease-out;
+        }
+        
+        .mood-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .mood-option:hover::before {
+            left: 100%;
+        }
+        
+        .mood-option:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(0, 51, 59, 0.4);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 51, 59, 0.3),
+                0 0 20px rgba(3, 137, 74, 0.3);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+        }
+        
+        .mood-option:active {
+            transform: translateY(-4px) scale(0.98);
+            transition: all 0.1s ease;
+        }
+        
+        .mood-option.clicked {
+            animation: buttonClick 0.6s ease-out;
+        }
+        
+        @keyframes buttonClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(8px);
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: auto;
+            height: auto;
+            background: transparent;
+            border-radius: 20px;
+            overflow: visible;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 95vw;
+            max-height: 95vh;
+        }
+        
+        .modal-image-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-actions-under {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-image {
+            width: auto;
+            height: auto;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: block;
+            border-radius: 20px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            object-fit: contain;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.4s ease;
+        }
+        
+        .modal-image.loaded {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* Smart image sizing based on screen ratio */
+        @media (max-aspect-ratio: 9/16) {
+            /* Portrait screens - fit to width */
+            .modal-image {
+                width: calc(100vw - 60px);
+                height: auto;
+                max-height: none;
+            }
+        }
+        
+        @media (min-aspect-ratio: 9/16) {
+            /* Landscape screens - fit to height */
+            .modal-image {
+                width: auto;
+                height: calc(100vh - 60px);
+                max-width: none;
+            }
+        }
+        
+        /* Loading spinner */
+        .image-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #03894a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        
+        /* Action buttons under image */
+        .action-btn {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            background: rgba(0, 51, 59, 0.7);
+            padding: 12px 20px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px) saturate(150%);
+            -webkit-backdrop-filter: blur(15px) saturate(150%);
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .action-btn:hover {
+            background: rgba(0, 51, 59, 0.9);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 30px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+        }
+        
+        /* Modal Animation */
+        .modal.show {
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        .modal-content.show {
+            animation: modalContentSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes modalContentSlideIn {
+            from { 
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to { 
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 50px 25px;
+            }
+            
+            .title {
+                font-size: 2.2rem;
+                margin-bottom: 40px;
+            }
+            
+            .mood-options {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .mood-option {
+                padding: 20px 15px;
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 40px 20px;
+                border-radius: 25px;
+            }
+            
+            .title {
+                font-size: 1.8rem;
+                margin-bottom: 35px;
+            }
+            
+            .mood-option {
+                padding: 18px 12px;
+                font-size: 1.1rem;
+                border-radius: 15px;
+            }
+            
+            /* Modal responsive for mobile */
+            .modal-image {
+                max-width: calc(100vw - 20px);
+                max-height: calc(100vh - 20px);
+            }
+            
+            /* Modal responsive */
+            
+            .modal-actions-under {
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            
+            .action-btn {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+        
+        /* Animation */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes borderPulse {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            20% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            40% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            60% {
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+            80% {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+        }
+        
+        /* Additional interactive effects */
+        .mood-option {
+            position: relative;
+        }
+        
+        .mood-option:hover::after {
+            animation: none;
+        }
+        
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        /* Title animation */
+        .title {
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            from {
+                text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            }
+            to {
+                text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 20px rgba(3, 137, 74, 0.3);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container fade-in">
+        <h1 class="title">ماهو شعورك اليوم؟</h1>
+        
+        <div class="mood-options">
+            <button class="mood-option" onclick="showMoodImage('happy')">سعيد</button>
+            <button class="mood-option" onclick="showMoodImage('proud')">فخور</button>
+            <button class="mood-option" onclick="showMoodImage('grateful')">ممتن</button>
+            <button class="mood-option" onclick="showMoodImage('excited')">متحمس</button>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div id="moodModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-image-container">
+                <div class="image-loading" id="imageLoading" style="display: none;"></div>
+                <img id="modalImage" class="modal-image" src="" alt="Mood Image">
+            </div>
+            
+            <div class="modal-actions-under">
+                <button class="action-btn" onclick="saveImage()" title="حفظ الصورة">
+                    <span>💾</span>
+                    <span>حفظ</span>
+                </button>
+                <button class="action-btn" onclick="shareImage()" title="مشاركة">
+                    <span>📤</span>
+                    <span>مشاركة</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mood to image mapping
+        const moodImages = {
+            'happy': 'Images/Image1.PNG',
+            'proud': 'Images/Image2.PNG',
+            'grateful': 'Images/Image3.PNG',
+            'excited': 'Images/Image4.PNG'
+        };
+        
+        function showMoodImage(mood) {
+            const modal = document.getElementById('moodModal');
+            const modalContent = modal.querySelector('.modal-content');
+            const modalImage = document.getElementById('modalImage');
+            const imageLoading = document.getElementById('imageLoading');
+            
+            // Find the clicked button and add interactive effects
+            const clickedButton = event.target;
+            clickedButton.classList.add('animate-border', 'clicked');
+            
+            // Remove animation classes after completion
+            setTimeout(() => {
+                clickedButton.classList.remove('animate-border', 'clicked');
+            }, 1500);
+            
+            // Show modal with loading
+            modal.style.display = 'block';
+            imageLoading.style.display = 'block';
+            modalImage.classList.remove('loaded');
+            
+            // Add modal animation
+            setTimeout(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            }, 10);
+            
+            // Preload image for better experience
+            const img = new Image();
+            img.onload = function() {
+                modalImage.src = moodImages[mood];
+                imageLoading.style.display = 'none';
+                setTimeout(() => {
+                    modalImage.classList.add('loaded');
+                }, 100);
+            };
+            img.onerror = function() {
+                imageLoading.style.display = 'none';
+                modalImage.src = moodImages[mood]; // Fallback
+                modalImage.classList.add('loaded');
+            };
+            img.src = moodImages[mood];
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('moodModal');
+            const modalContent = modal.querySelector('.modal-content');
+            const modalImage = document.getElementById('modalImage');
+            const imageLoading = document.getElementById('imageLoading');
+            
+            modal.classList.remove('show');
+            modalContent.classList.remove('show');
+            modalImage.classList.remove('loaded');
+            imageLoading.style.display = 'none';
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+        
+        // Close modal when clicking outside the image
+        window.onclick = function(event) {
+            const modal = document.getElementById('moodModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // Add ripple effect to mood options
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            button.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+        
+        // Add ripple effect to all mood options
+        document.addEventListener('DOMContentLoaded', function() {
+            const moodOptions = document.querySelectorAll('.mood-option');
+            moodOptions.forEach(option => {
+                option.addEventListener('click', createRipple);
+            });
+        });
+        
+        // Save image function
+        function saveImage() {
+            const modalImage = document.getElementById('modalImage');
+            const imageSrc = modalImage.src;
+            
+            if (!imageSrc) return;
+            
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = imageSrc;
+            link.download = `mood-image-${Date.now()}.png`;
+            
+            // Add to DOM, click, and remove
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Show feedback
+            showToast('تم حفظ الصورة بنجاح!');
+        }
+        
+        // Share image function
+        function shareImage() {
+            const modalImage = document.getElementById('modalImage');
+            const imageSrc = modalImage.src;
+            
+            if (!imageSrc) return;
+            
+            if (navigator.share) {
+                // Use native share API if available
+                navigator.share({
+                    title: 'شارك شعورك اليوم',
+                    text: 'شاهد هذه الصورة التي تعبر عن شعوري اليوم',
+                    url: imageSrc
+                }).catch(err => {
+                    console.log('Error sharing:', err);
+                    fallbackShare(imageSrc);
+                });
+            } else {
+                // Fallback for browsers that don't support native sharing
+                fallbackShare(imageSrc);
+            }
+        }
+        
+        // Fallback share function
+        function fallbackShare(imageSrc) {
+            // Copy to clipboard
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(imageSrc).then(() => {
+                    showToast('تم نسخ رابط الصورة!');
+                }).catch(() => {
+                    showToast('شارك الصورة يدوياً');
+                });
+            } else {
+                // Show the URL for manual copying
+                prompt('انسخ هذا الرابط للمشاركة:', imageSrc);
+                showToast('تم عرض رابط المشاركة');
+            }
+        }
+        
+        // Toast notification function
+        function showToast(message) {
+            // Remove existing toast if any
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 51, 59, 0.9);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 25px;
+                font-family: 'Cairo', sans-serif;
+                font-size: 14px;
+                font-weight: 600;
+                z-index: 10000;
+                backdrop-filter: blur(15px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.style.opacity = '1';
+            }, 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
