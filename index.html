@@ -28,6 +28,7 @@
         /* Background Layer */
         body {
             font-family: 'Cairo', sans-serif;
+            background-color: #008a4a; /* Saudi green fallback color */
             background-image: url('BackgroundElements/Background.svg');
             background-size: cover;
             background-position: center;
@@ -40,34 +41,38 @@
         
         /* Header */
         .header {
-            position: fixed;
-            top: 0;
-            left: 0;
+            position: relative;
             width: 100%;
-            height: auto;
-            z-index: 100;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
         }
         
         .logo {
-            position: absolute;
-            top: 10px;
-            left: 20px; /* Force logo to left side */
             width: auto;
-            height: 180px;
+            height: 140px;
             opacity: 0;
             transform: translateY(-20px);
             animation: logoSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+            flex-shrink: 0;
         }
         
         .page-title {
             position: absolute;
-            top: 20px;
             left: 50%;
+            top: 20px;
             transform: translateX(-50%);
             max-width: 60%;
             height: auto;
             opacity: 0;
             animation: titleFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+        }
+        
+        .header-spacer {
+            width: 140px;
+            flex-shrink: 0;
         }
         
         @keyframes logoSlideIn {
@@ -85,12 +90,11 @@
         
         /* Main Content */
         .main {
-            min-height: 100vh;
+            min-height: calc(100vh - 200px);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            padding-top: 140px;
         }
         
         .card {
@@ -314,6 +318,11 @@
         
         /* Responsive */
         @media (max-width: 768px) {
+            .header {
+                padding: 15px;
+                margin-bottom: 120px;
+            }
+            
             .logo {
                 display: none;
             }
@@ -324,7 +333,7 @@
             }
             
             .main {
-                padding-top: 100px;
+                padding: 15px;
             }
             
             .card {
@@ -348,13 +357,39 @@
                 font-size: 1.2rem;
                 border-radius: 40px;
             }
+            
+            /* Modal responsive for tablet */
+            .modal-content {
+                max-width: 95%;
+                max-height: 85%;
+                padding: 20px;
+                margin: 20px;
+            }
+            
+            .modal-image {
+                max-height: 65vh;
+                border-radius: 20px;
+            }
+            
+            .modal-actions {
+                margin-top: 20px;
+                gap: 15px;
+            }
+            
+            .action-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
         }
         
         @media (max-width: 480px) {
+            .header {
+                padding: 12px;
+                margin-bottom: 5px;
+            }
+            
             .logo {
-                top: 12px;
-                left: 12px;
-                max-width: 70px;
+                height: 100px;
             }
             
             .page-title {
@@ -362,9 +397,14 @@
                 max-width: 70%;
             }
             
+            .main {
+                padding: 12px;
+            }
+            
             .card {
                 padding: 35px 20px;
                 border-radius: 28px;
+                margin: 0 5px;
             }
             
             .title {
@@ -372,10 +412,46 @@
                 margin-bottom: 30px;
             }
             
+            .buttons {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+            
             .btn {
                 padding: 16px 18px;
                 font-size: 1.1rem;
                 border-radius: 35px;
+            }
+            
+            /* Modal responsive for mobile - avoid browser search bar */
+            .modal {
+                padding: 60px 10px 120px 10px; /* Top padding for status bar, bottom for browser controls */
+            }
+            
+            .modal-content {
+                max-width: calc(100% - 20px);
+                max-height: calc(100vh - 180px); /* Account for browser UI */
+                padding: 15px;
+                margin: 0;
+            }
+            
+            .modal-image {
+                max-height: calc(60vh - 60px); /* Ensure space for actions */
+                max-width: 100%;
+                border-radius: 15px;
+            }
+            
+            .modal-actions {
+                margin-top: 15px;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+            
+            .action-btn {
+                padding: 10px 16px;
+                font-size: 13px;
+                border-radius: 25px;
+                min-width: 80px;
             }
         }
     </style>
@@ -385,6 +461,7 @@
     <header class="header">
         <img src="BackgroundElements/Logo.png" alt="Logo" class="logo">
         <img src="BackgroundElements/Title.png" alt="Title" class="page-title">
+        <div class="header-spacer"></div>
     </header>
     
     <!-- Main Content -->
