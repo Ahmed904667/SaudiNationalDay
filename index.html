@@ -94,9 +94,10 @@
             min-height: calc(100dvh - 200px);
             min-height: calc(100vh - 200px); /* Fallback */
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             padding: 20px;
+            padding-top: 20px; /* Push card down from top */
             /* Account for mobile toolbars */
             padding-bottom: calc(20px + env(safe-area-inset-bottom));
         }
@@ -345,6 +346,159 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
         
+        /* Desktop Modal Styles (769px+) */
+        .modal-desktop {
+            display: none;
+        }
+        
+        @media (min-width: 769px) {
+            .modal-mobile {
+                display: none !important; /* Hide mobile modal on desktop */
+            }
+            
+            .modal-content-desktop {
+                display: flex;
+                align-items: flex-start;
+                gap: 20px;
+                max-width: 90%;
+                max-height: 90%;
+                background: transparent;
+                padding: 0;
+            }
+            
+            .modal-controls-desktop {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                flex-shrink: 0;
+                align-items: center;
+            }
+            
+            .modal-image-desktop {
+                max-width: calc(100% - 100px);
+                max-height: 85vh;
+                object-fit: contain;
+                border-radius: 15px;
+                order: 2;
+            }
+            
+            .close-btn-desktop, .action-btn-desktop {
+                background: rgba(0, 0, 0, 0.7);
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                color: white;
+                font-size: 24px;
+                font-weight: bold;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+            }
+            
+            .close-btn-desktop:hover, .action-btn-desktop:hover {
+                background: rgba(0, 0, 0, 0.9);
+                border-color: rgba(255, 255, 255, 0.5);
+                transform: scale(1.1);
+            }
+        }
+        
+        /* Mobile Modal Styles (768px and below) */
+        .modal-mobile {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .modal-desktop {
+                display: none !important; /* Hide desktop modal on mobile */
+            }
+            
+            .modal-content-mobile {
+                max-width: 100%;
+                max-height: 100%;
+                padding: 0;
+                margin: 0;
+                display: block;
+                position: relative;
+                width: 100vw;
+                height: 100dvh;
+                height: 100vh; /* Fallback */
+            }
+            
+            .modal-image-mobile {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 0;
+                display: block;
+            }
+            
+            .close-btn-mobile {
+                position: fixed;
+                top: calc(env(safe-area-inset-top) + 5px);
+                top: 5px;
+                right: calc(env(safe-area-inset-right) + 5px);
+                right: 5px;
+                background: transparent;
+                border: none;
+                width: 50px;
+                height: 50px;
+                color: white;
+                font-size: 30px;
+                font-weight: bold;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1003;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+                direction: ltr;
+                transition: all 0.3s ease;
+            }
+            
+            .close-btn-mobile:hover {
+                transform: scale(1.2);
+                text-shadow: 2px 2px 8px rgba(0, 0, 0, 1);
+            }
+            
+            .modal-actions-mobile {
+                position: fixed;
+                bottom: calc(env(safe-area-inset-bottom) + 50px);
+                bottom: 50px;
+                left: calc(env(safe-area-inset-left) + 20px);
+                left: 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                z-index: 1002;
+            }
+            
+            .action-btn-mobile {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.15);
+                border: none;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+            }
+            
+            .action-btn-mobile:hover {
+                background: rgba(255, 255, 255, 0.25);
+                transform: scale(1.1);
+            }
+        }
+        
         /* Large Desktop and below - apply logo left, title right layout */
         @media (max-width: 1200px) {
             .logo {
@@ -570,39 +724,25 @@
                 display: block;
             }
             
-            /* Close button - top right (top left in RTL) */
-            .close-btn {
-                position: absolute;
-                top: calc(env(safe-area-inset-top) + 70px);
-                top: 70px; /* Fallback */
-                right: calc(env(safe-area-inset-right) + 1px);
-                right: 1px; /* Fallback - will be left in RTL */
-                background: transparent;
-                border: none;
-                width: 50px;
-                height: 50px;
-                color: white;
-                font-size: 30px;
-                font-weight: bold;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 1002;
-                transition: all 0.3s ease;
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-            }
-            
-            .close-btn:hover {
-                transform: scale(1.2);
-                text-shadow: 2px 2px 8px rgba(0, 0, 0, 1);
-            }
+             /* Close button - mobile positioning override */
+             @media (max-width: 768px) {
+                 .close-btn {
+                     top: calc(env(safe-area-inset-top) + 10px);
+                     top: 10px; /* Fallback */
+                     right: calc(env(safe-area-inset-right) + 10px);
+                     right: 10px; /* Fallback */
+                     background: transparent;
+                     border: none;
+                     backdrop-filter: none;
+                     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+                 }
+             }
             
             /* Action buttons - bottom left */
             .modal-actions {
-                position: absolute;
-                bottom: calc(env(safe-area-inset-bottom) + 90px);
-                bottom: 90px; /* Fallback - more margin from bottom */
+            position: absolute;
+                bottom: calc(env(safe-area-inset-bottom) + 50px);
+                bottom: 50px; /* Fallback - more margin from bottom */
                 left: calc(env(safe-area-inset-left) + 20px);
                 left: 20px; /* Fallback */
                 display: flex;
@@ -655,21 +795,40 @@
         </div>
     </main>
     
-    <!-- Modal -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-loading-overlay" id="modalLoading" style="display: none;">
+    <!-- Desktop Modal (769px+) -->
+    <div id="modalDesktop" class="modal modal-desktop">
+        <div class="modal-content-desktop">
+            <div class="modal-loading-overlay" id="modalLoadingDesktop" style="display: none;">
                 <div class="modal-loading">💚</div>
             </div>
-            <img id="modalImage" class="modal-image" src="" alt="Mood Image">
+            
+            <!-- Controls sidebar -->
+            <div class="modal-controls-desktop">
+                <button class="close-btn-desktop" onclick="closeModal()">×</button>
+                <button class="action-btn-desktop" onclick="shareImage()">📤</button>
+                <button class="action-btn-desktop" onclick="saveImage()">💾</button>
+            </div>
+            
+            <img id="modalImageDesktop" class="modal-image-desktop" src="" alt="Mood Image">
+        </div>
+    </div>
+    
+    <!-- Mobile Modal (768px and below) -->
+    <div id="modalMobile" class="modal modal-mobile">
+        <div class="modal-content-mobile">
+            <div class="modal-loading-overlay" id="modalLoadingMobile" style="display: none;">
+                <div class="modal-loading">💚</div>
+            </div>
+            
+            <img id="modalImageMobile" class="modal-image-mobile" src="" alt="Mood Image">
             
             <!-- Close button -->
-            <button class="close-btn" onclick="closeModal()">×</button>
+            <button class="close-btn-mobile" onclick="closeModal()">×</button>
             
             <!-- Action buttons -->
-            <div class="modal-actions">
-                <button class="action-btn" onclick="saveImage()">💾</button>
-                <button class="action-btn" onclick="shareImage()">📤</button>
+            <div class="modal-actions-mobile">
+                <button class="action-btn-mobile" onclick="saveImage()">💾</button>
+                <button class="action-btn-mobile" onclick="shareImage()">📤</button>
             </div>
         </div>
     </div>
@@ -683,79 +842,114 @@
             'excited': 'Images/Image4.PNG'
         };
         
-        // Show mood
+        // Show mood - detect device and show appropriate modal
         function showMood(mood) {
-            const modal = document.getElementById('modal');
-            const modalContent = modal.querySelector('.modal-content');
-            const modalActions = modal.querySelector('.modal-actions');
-            const modalLoading = document.getElementById('modalLoading');
-            const image = document.getElementById('modalImage');
+            const isDesktop = window.innerWidth >= 769;
             
-            // Show modal with loading
-            modal.style.display = 'flex';
-            modalLoading.style.display = 'flex';
-            
-            // Start animations
-            setTimeout(() => {
-                modal.classList.add('show');
-                modalContent.classList.add('show');
-            }, 10);
-            
-            // Load image with beating heart animation
-            image.onload = function() {
-                // Hide loading after image loads
-                modalLoading.style.display = 'none';
+            if (isDesktop) {
+                // Desktop modal
+                const modal = document.getElementById('modalDesktop');
+                const modalContent = modal.querySelector('.modal-content-desktop');
+                const modalLoading = document.getElementById('modalLoadingDesktop');
+                const image = document.getElementById('modalImageDesktop');
+                
+                modal.style.display = 'flex';
+                modalLoading.style.display = 'flex';
+                
                 setTimeout(() => {
-                    image.classList.add('loaded');
-                    modalActions.classList.add('show');
-                }, 100);
-            };
-            
-            image.onerror = function() {
-                // Hide loading even on error
-                modalLoading.style.display = 'none';
+                    modal.classList.add('show');
+                    modalContent.classList.add('show');
+                }, 10);
+                
+                image.onload = function() {
+                    modalLoading.style.display = 'none';
+                    setTimeout(() => {
+                        image.classList.add('loaded');
+                    }, 100);
+                };
+                
+                image.src = moods[mood];
+            } else {
+                // Mobile modal
+                const modal = document.getElementById('modalMobile');
+                const modalContent = modal.querySelector('.modal-content-mobile');
+                const modalLoading = document.getElementById('modalLoadingMobile');
+                const image = document.getElementById('modalImageMobile');
+                
+                modal.style.display = 'flex';
+                modalLoading.style.display = 'flex';
+                
                 setTimeout(() => {
-                    image.classList.add('loaded');
-                    modalActions.classList.add('show');
-                }, 100);
-            };
-            
-            image.src = moods[mood];
+                    modal.classList.add('show');
+                    modalContent.classList.add('show');
+                }, 10);
+                
+                image.onload = function() {
+                    modalLoading.style.display = 'none';
+                    setTimeout(() => {
+                        image.classList.add('loaded');
+                    }, 100);
+                };
+                
+                image.src = moods[mood];
+            }
         }
         
-        // Close modal
+        // Close modal - handle both desktop and mobile
         function closeModal() {
-            const modal = document.getElementById('modal');
-            const modalContent = modal.querySelector('.modal-content');
-            const modalActions = modal.querySelector('.modal-actions');
-            const modalLoading = document.getElementById('modalLoading');
-            const image = document.getElementById('modalImage');
+            const desktopModal = document.getElementById('modalDesktop');
+            const mobileModal = document.getElementById('modalMobile');
             
-            // Start close animations
-            modal.classList.remove('show');
-            modalContent.classList.remove('show');
-            modalActions.classList.remove('show');
-            image.classList.remove('loaded');
-            modalLoading.style.display = 'none';
+            // Close desktop modal
+            if (desktopModal.style.display === 'flex') {
+                const modalContent = desktopModal.querySelector('.modal-content-desktop');
+                const modalLoading = document.getElementById('modalLoadingDesktop');
+                const image = document.getElementById('modalImageDesktop');
+                
+                desktopModal.classList.remove('show');
+                modalContent.classList.remove('show');
+                image.classList.remove('loaded');
+                modalLoading.style.display = 'none';
+                
+                setTimeout(() => {
+                    desktopModal.style.display = 'none';
+                }, 400);
+            }
             
-            // Hide modal after animation
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 400);
+            // Close mobile modal
+            if (mobileModal.style.display === 'flex') {
+                const modalContent = mobileModal.querySelector('.modal-content-mobile');
+                const modalLoading = document.getElementById('modalLoadingMobile');
+                const image = document.getElementById('modalImageMobile');
+                
+                mobileModal.classList.remove('show');
+                modalContent.classList.remove('show');
+                image.classList.remove('loaded');
+                modalLoading.style.display = 'none';
+                
+                setTimeout(() => {
+                    mobileModal.style.display = 'none';
+                }, 400);
+            }
         }
         
-        // Save image
+        // Save image - handle both modal types
         function saveImage() {
-            const image = document.getElementById('modalImage');
+            const desktopImage = document.getElementById('modalImageDesktop');
+            const mobileImage = document.getElementById('modalImageMobile');
+            const image = desktopImage.src ? desktopImage : mobileImage;
+            
             const link = document.createElement('a');
             link.href = image.src;
             link.download = `mood-${Date.now()}.png`;
             link.click();
         }
         
-        // Share image
+        // Share image - handle both modal types
         function shareImage() {
-            const image = document.getElementById('modalImage');
+            const desktopImage = document.getElementById('modalImageDesktop');
+            const mobileImage = document.getElementById('modalImageMobile');
+            const image = desktopImage.src ? desktopImage : mobileImage;
             
             if (navigator.share) {
                 navigator.share({
