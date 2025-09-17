@@ -372,6 +372,14 @@
                 gap: 15px;
                 flex-shrink: 0;
                 align-items: center;
+                opacity: 0;
+                transform: translateX(-20px);
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .modal-controls-desktop.show {
+                opacity: 1;
+                transform: translateX(0);
             }
             
             .modal-image-desktop {
@@ -474,6 +482,14 @@
                 flex-direction: column;
                 gap: 15px;
                 z-index: 1002;
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .modal-actions-mobile.show {
+                opacity: 1;
+                transform: translateY(0);
             }
             
             .action-btn-mobile {
@@ -850,11 +866,13 @@
                 // Desktop modal
                 const modal = document.getElementById('modalDesktop');
                 const modalContent = modal.querySelector('.modal-content-desktop');
+                const modalControls = modal.querySelector('.modal-controls-desktop');
                 const modalLoading = document.getElementById('modalLoadingDesktop');
                 const image = document.getElementById('modalImageDesktop');
                 
                 modal.style.display = 'flex';
                 modalLoading.style.display = 'flex';
+                modalControls.classList.remove('show'); // Hide controls initially
                 
                 setTimeout(() => {
                     modal.classList.add('show');
@@ -865,6 +883,7 @@
                     modalLoading.style.display = 'none';
                     setTimeout(() => {
                         image.classList.add('loaded');
+                        modalControls.classList.add('show'); // Show controls after image loads
                     }, 100);
                 };
                 
@@ -873,11 +892,13 @@
                 // Mobile modal
                 const modal = document.getElementById('modalMobile');
                 const modalContent = modal.querySelector('.modal-content-mobile');
+                const modalActions = modal.querySelector('.modal-actions-mobile');
                 const modalLoading = document.getElementById('modalLoadingMobile');
                 const image = document.getElementById('modalImageMobile');
                 
                 modal.style.display = 'flex';
                 modalLoading.style.display = 'flex';
+                modalActions.classList.remove('show'); // Hide actions initially
                 
                 setTimeout(() => {
                     modal.classList.add('show');
@@ -888,6 +909,7 @@
                     modalLoading.style.display = 'none';
                     setTimeout(() => {
                         image.classList.add('loaded');
+                        modalActions.classList.add('show'); // Show actions after image loads
                     }, 100);
                 };
                 
