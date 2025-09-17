@@ -968,24 +968,45 @@
         }
         
         // Share image - handle both modal types
-        function shareImage() {
+        async function shareImage() {
             const desktopImage = document.getElementById('modalImageDesktop');
             const mobileImage = document.getElementById('modalImageMobile');
             const image = desktopImage.src ? desktopImage : mobileImage;
             
-            if (navigator.share) {
-                navigator.share({
-                    title: 'شارك شعورك اليوم',
-                    text: 'شاهد هذه الصورة التي تعبر عن شعوري اليوم',
-                    url: image.src
-                });
-            } else {
-                // Fallback - copy to clipboard
-                navigator.clipboard.writeText(image.src).then(() => {
+            try {
+                // Convert image to blob
+                const response = await fetch(image.src);
+                const blob = await response.blob();
+                const file = new File([blob], `mood-image-${Date.now()}.png`, { type: blob.type });
+                
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    // Share the actual image file
+                    await navigator.share({
+                        title: 'شارك شعورك اليوم',
+                        text: 'شاهد هذه الصورة التي تعبر عن شعوري اليوم',
+                        files: [file]
+                    });
+                } else if (navigator.share) {
+                    // Fallback to URL sharing
+                    await navigator.share({
+                        title: 'شارك شعورك اليوم',
+                        text: 'شاهد هذه الصورة التي تعبر عن شعوري اليوم',
+                        url: image.src
+                    });
+                } else {
+                    // Final fallback - copy to clipboard
+                    await navigator.clipboard.writeText(image.src);
                     alert('تم نسخ رابط الصورة!');
-                }).catch(() => {
-                    alert('شارك الصورة يدوياً');
-                });
+                }
+            } catch (error) {
+                console.error('Error sharing image:', error);
+                // Fallback - copy to clipboard
+                try {
+                    await navigator.clipboard.writeText(image.src);
+                    alert('تم نسخ رابط الصورة!');
+                } catch (clipboardError) {
+                    alert('لا يمكن مشاركة الصورة');
+                }
             }
         }
         
