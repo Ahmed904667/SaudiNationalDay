@@ -968,41 +968,59 @@
             }
         }
         
-        // Close modal - handle both desktop and mobile
+        // Close modal - handle both desktop and mobile with animations
         function closeModal() {
             const desktopModal = document.getElementById('modalDesktop');
             const mobileModal = document.getElementById('modalMobile');
             
-            // Close desktop modal
+            // Close desktop modal with animations
             if (desktopModal.style.display === 'flex') {
                 const modalContent = desktopModal.querySelector('.modal-content-desktop');
+                const modalControls = desktopModal.querySelector('.modal-controls-desktop');
                 const modalLoading = document.getElementById('modalLoadingDesktop');
                 const image = document.getElementById('modalImageDesktop');
                 
-                desktopModal.classList.remove('show');
-                modalContent.classList.remove('show');
-                image.classList.remove('loaded');
+                // Start close animations
+                modalControls.classList.remove('show'); // Hide controls first
+                image.classList.remove('loaded'); // Scale down image
                 modalLoading.style.display = 'none';
+                
+                setTimeout(() => {
+                    modalContent.classList.remove('show'); // Content animation
+                }, 100);
+                
+                setTimeout(() => {
+                    desktopModal.classList.remove('show'); // Background fade
+                }, 200);
                 
                 setTimeout(() => {
                     desktopModal.style.display = 'none';
-                }, 400);
+                }, 600);
             }
             
-            // Close mobile modal
+            // Close mobile modal with animations
             if (mobileModal.style.display === 'flex') {
                 const modalContent = mobileModal.querySelector('.modal-content-mobile');
+                const modalActions = mobileModal.querySelector('.modal-actions-mobile');
                 const modalLoading = document.getElementById('modalLoadingMobile');
                 const image = document.getElementById('modalImageMobile');
                 
-                mobileModal.classList.remove('show');
-                modalContent.classList.remove('show');
-                image.classList.remove('loaded');
+                // Start close animations
+                modalActions.classList.remove('show'); // Hide actions first
+                image.classList.remove('loaded'); // Scale down image
                 modalLoading.style.display = 'none';
                 
                 setTimeout(() => {
+                    modalContent.classList.remove('show'); // Content animation
+                }, 100);
+                
+                setTimeout(() => {
+                    mobileModal.classList.remove('show'); // Background fade
+                }, 200);
+                
+                setTimeout(() => {
                     mobileModal.style.display = 'none';
-                }, 400);
+                }, 600);
             }
         }
         
