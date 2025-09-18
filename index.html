@@ -54,15 +54,25 @@
             height: 180px; /* Fixed height for positioning */
         }
         
-        .logo {
+        .logo-link {
             position: absolute;
             top: 20px;
             left: 20px; /* Force logo to left side */
-            width: auto;
-            height: 140px;
+            display: inline-block;
             opacity: 0;
             transform: translateY(-20px);
             animation: logoSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+            transition: all 0.3s ease;
+        }
+        
+        .logo-link:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+        
+        .logo {
+            width: auto;
+            height: 140px;
+            display: block;
         }
         
         .page-title {
@@ -517,10 +527,13 @@
         
         /* Large Desktop and below - apply logo left, title right layout */
         @media (max-width: 1200px) {
-            .logo {
-                height: 160px;
+            .logo-link {
                 top: 20px;
                 left: 20px;
+            }
+            
+            .logo {
+                height: 160px;
             }
             
             .page-title {
@@ -558,10 +571,13 @@
         
         /* Desktop/Tablet (992px - 1199px) */
         @media (min-width: 992px) and (max-width: 1199px) {
-            .logo {
-                height: 140px;
+            .logo-link {
                 top: 18px;
                 left: 18px;
+            }
+            
+            .logo {
+                height: 140px;
             }
             
             .page-title {
@@ -574,10 +590,13 @@
         
         /* Tablet (768px - 991px) */
         @media (min-width: 768px) and (max-width: 991px) {
-            .logo {
-                height: 120px;
+            .logo-link {
                 top: 16px;
                 left: 16px;
+            }
+            
+            .logo {
+                height: 120px;
             }
             
             .page-title {
@@ -595,10 +614,13 @@
                 margin-bottom: 1px;
             }
             
-            .logo {
-                height: 100px;
+            .logo-link {
                 top: 40px;
                 left: 15px;
+            }
+            
+            .logo {
+                height: 100px;
             }
             
             .page-title {
@@ -669,10 +691,13 @@
                 margin-bottom: 1px;
             }
             
-            .logo {
-                height: 90px;
+            .logo-link {
                 top: 40px;
                 left: 12px;
+            }
+            
+            .logo {
+                height: 90px;
             }
             
             .page-title {
@@ -793,7 +818,9 @@
 <body>
     <!-- Header -->
     <header class="header">
-        <img src="BackgroundElements/Logo.png" alt="Logo" class="logo">
+        <a href="https://spimaco.com.sa" target="_blank" rel="noopener noreferrer" class="logo-link">
+            <img src="BackgroundElements/Logo.png" alt="Logo" class="logo">
+        </a>
         <img src="BackgroundElements/Title.png" alt="Title" class="page-title">
     </header>
     
