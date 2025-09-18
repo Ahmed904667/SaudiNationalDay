@@ -270,7 +270,7 @@
             transform: scale(1);
         }
         
-        /* Loading heart animation with volatile circles */
+        /* Loading heart animation */
         .modal-loading {
             position: absolute;
             top: 50%;
@@ -279,32 +279,6 @@
             font-size: 4rem;
             z-index: 1001;
             animation: heartBeat 1.2s ease-in-out infinite;
-        }
-        
-        .modal-loading::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 120px;
-            height: 120px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            animation: pulseCircle1 1.2s ease-in-out infinite;
-        }
-        
-        .modal-loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            animation: pulseCircle2 1.2s ease-in-out infinite 0.3s;
         }
         
         @keyframes heartBeat {
@@ -319,52 +293,6 @@
             }
             75% {
                 transform: translate(-50%, -50%) scale(1.2);
-            }
-        }
-        
-        @keyframes pulseCircle1 {
-            0% {
-                transform: translate(-50%, -50%) scale(0.8);
-                opacity: 0;
-            }
-            25% {
-                transform: translate(-50%, -50%) scale(1.2);
-                opacity: 0.6;
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.5);
-                opacity: 0.3;
-            }
-            75% {
-                transform: translate(-50%, -50%) scale(1.8);
-                opacity: 0.1;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(2);
-                opacity: 0;
-            }
-        }
-        
-        @keyframes pulseCircle2 {
-            0% {
-                transform: translate(-50%, -50%) scale(0.5);
-                opacity: 0;
-            }
-            25% {
-                transform: translate(-50%, -50%) scale(0.8);
-                opacity: 0.8;
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.2);
-                opacity: 0.4;
-            }
-            75% {
-                transform: translate(-50%, -50%) scale(1.6);
-                opacity: 0.2;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(2);
-                opacity: 0;
             }
         }
         
@@ -676,6 +604,30 @@
                 right: 16px;
                 max-width: 58%;
                 max-height: 120px;
+            }
+            
+            .main {
+                padding: 20px;
+                padding-top: 40px; /* Adjusted for tablet header size */
+            }
+            
+            .card {
+                max-width: 550px;
+                padding: 50px 40px;
+            }
+            
+            .title {
+                font-size: 2.1rem;
+                margin-bottom: 35px;
+            }
+            
+            .buttons {
+                gap: 18px;
+            }
+            
+            .btn {
+                padding: 20px 24px;
+                font-size: 1.2rem;
             }
         }
         
