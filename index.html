@@ -406,7 +406,7 @@
             opacity: 1;
         }
             
-            .close-btn-desktop, .action-btn-desktop {
+            .close-btn-desktop {
                 background: rgba(0, 0, 0, 0.7);
                 border: 2px solid rgba(255, 255, 255, 0.3);
                 border-radius: 50%;
@@ -421,6 +421,25 @@
                 justify-content: center;
                 transition: all 0.3s ease;
                 backdrop-filter: blur(10px);
+            }
+            
+            .action-btn-desktop {
+                background: rgba(0, 0, 0, 0.7);
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 30px;
+                padding: 12px 20px;
+                color: white;
+                font-size: 14px;
+                font-weight: 600;
+                font-family: 'Cairo', sans-serif;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+                white-space: nowrap;
             }
             
             .close-btn-desktop:hover, .action-btn-desktop:hover {
@@ -515,25 +534,28 @@
             }
             
             .action-btn-mobile {
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
                 background: rgba(255, 255, 255, 0.15);
                 border: none;
+                border-radius: 30px;
+                padding: 12px 20px;
                 color: white;
-                font-size: 24px;
+                font-size: 14px;
+                font-weight: 600;
+                font-family: 'Cairo', sans-serif;
                 cursor: pointer;
                 transition: all 0.3s ease;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                gap: 8px;
                 backdrop-filter: blur(15px);
                 -webkit-backdrop-filter: blur(15px);
+                white-space: nowrap;
             }
             
             .action-btn-mobile:hover {
                 background: rgba(255, 255, 255, 0.25);
-                transform: scale(1.1);
+                transform: scale(1.05);
             }
         }
         
@@ -863,20 +885,20 @@
     <!-- Main Content -->
     <main class="main">
         <div class="card">
-            <h1 class="title"> ماهو شعورك اليوم؟ 🇸🇦</h1>
+            <h1 class="title"> ماهو شعورك اليوم؟ </h1>
             
             <div class="buttons">
-                <button class="btn" onclick="showMood('happy')">سعيد 😊</button>
-                <button class="btn" onclick="showMood('proud')">فخور 🦅</button>
-                <button class="btn" onclick="showMood('grateful')">ممتن 🙏</button>
-                <button class="btn" onclick="showMood('excited')">متحمس 🔥</button>
+                <button class="btn" onclick="showMood('happy')">سعيد </button>
+                <button class="btn" onclick="showMood('proud')">فخور </button>
+                <button class="btn" onclick="showMood('grateful')">ممتن </button>
+                <button class="btn" onclick="showMood('excited')">متحمس </button>
             </div>
         </div>
     </main>
     
     <!-- Desktop Modal (769px+) -->
-    <div id="modalDesktop" class="modal modal-desktop">
-        <div class="modal-content-desktop">
+    <div id="modalDesktop" class="modal modal-desktop" onclick="closeModal()">
+        <div class="modal-content-desktop" onclick="event.stopPropagation()">
             <div class="modal-loading-overlay" id="modalLoadingDesktop" style="display: none;">
                 <div class="modal-loading">💚</div>
             </div>
@@ -884,8 +906,12 @@
             <!-- Controls sidebar -->
             <div class="modal-controls-desktop">
                 <button class="close-btn-desktop" onclick="closeModal()">×</button>
-                <button class="action-btn-desktop" onclick="shareImage()">📤</button>
-                <button class="action-btn-desktop" onclick="saveImage()">💾</button>
+                <button class="action-btn-desktop" onclick="saveImage()">
+                    <span>حمل النشرة</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                    </svg>
+                </button>
             </div>
             
             <img id="modalImageDesktop" class="modal-image-desktop" src="" alt="Mood Image">
@@ -904,10 +930,14 @@
             <!-- Close button -->
             <button class="close-btn-mobile" onclick="closeModal()">×</button>
             
-            <!-- Action buttons -->
+            <!-- Action button -->
             <div class="modal-actions-mobile">
-                <button class="action-btn-mobile" onclick="saveImage()">💾</button>
-                <button class="action-btn-mobile" onclick="shareImage()">📤</button>
+                <button class="action-btn-mobile" onclick="saveImage()">
+                    <span>حمل النشرة</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
@@ -1044,7 +1074,7 @@
             
             const link = document.createElement('a');
             link.href = image.src;
-            link.download = `mood-${Date.now()}.png`;
+            link.download = `spimaco-mood-${Date.now()}.png`;
             link.click();
         }
         
@@ -1058,7 +1088,7 @@
                 // Convert image to blob
                 const response = await fetch(image.src);
                 const blob = await response.blob();
-                const file = new File([blob], `mood-image-${Date.now()}.png`, { type: blob.type });
+                const file = new File([blob], `spimaco-mood-${Date.now()}.png`, { type: blob.type });
                 
                 if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                     // Share the actual image file
