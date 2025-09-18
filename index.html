@@ -392,13 +392,21 @@
                 transform: translateX(0);
             }
             
-            .modal-image-desktop {
-                max-width: calc(100% - 100px);
-                max-height: 85vh;
-                object-fit: contain;
-                border-radius: 15px;
-                order: 2;
-            }
+        .modal-image-desktop {
+            max-width: calc(100% - 100px);
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 15px;
+            order: 2;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .modal-image-desktop.loaded {
+            opacity: 1;
+            transform: scale(1);
+        }
             
             .close-btn-desktop, .action-btn-desktop {
                 background: rgba(0, 0, 0, 0.7);
@@ -452,6 +460,14 @@
                 object-fit: cover;
                 border-radius: 0;
                 display: block;
+                opacity: 0;
+                transform: scale(1.1);
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .modal-image-mobile.loaded {
+                opacity: 1;
+                transform: scale(1);
             }
             
             .close-btn-mobile {
