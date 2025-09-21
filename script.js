@@ -140,6 +140,9 @@ function showMood(mood) {
         const modalLoading = document.getElementById('modalLoadingDesktop');
         const image = document.getElementById('modalImageDesktop');
         
+        // Prevent body scroll
+        document.body.classList.add('modal-open');
+        
         modal.style.display = 'flex';
         modalLoading.style.display = 'flex';
         modalControls.classList.remove('show'); // Hide controls initially
@@ -165,6 +168,9 @@ function showMood(mood) {
         const modalActions = modal.querySelector('.modal-actions-mobile');
         const modalLoading = document.getElementById('modalLoadingMobile');
         const image = document.getElementById('modalImageMobile');
+        
+        // Prevent body scroll
+        document.body.classList.add('modal-open');
         
         modal.style.display = 'flex';
         modalLoading.style.display = 'flex';
@@ -199,6 +205,9 @@ function closeModal() {
         const modalLoading = document.getElementById('modalLoadingDesktop');
         const image = document.getElementById('modalImageDesktop');
         
+        // Re-enable body scroll
+        document.body.classList.remove('modal-open');
+        
         // Start close animations
         modalControls.classList.remove('show'); // Hide controls first
         image.classList.remove('loaded'); // Scale down image
@@ -224,6 +233,9 @@ function closeModal() {
         const modalLoading = document.getElementById('modalLoadingMobile');
         const image = document.getElementById('modalImageMobile');
         
+        // Re-enable body scroll
+        document.body.classList.remove('modal-open');
+        
         // Start close animations
         modalActions.classList.remove('show'); // Hide actions first
         image.classList.remove('loaded'); // Scale down image
@@ -243,35 +255,158 @@ function closeModal() {
     }
 }
 
-// Save image - handle both modal types
-async function saveImage() {
+// Save image - simple approach
+function saveImage(event) {
+    // Prevent event propagation to avoid closing modal
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    
     const desktopImage = document.getElementById('modalImageDesktop');
     const mobileImage = document.getElementById('modalImageMobile');
-    const image = desktopImage.src ? desktopImage : mobileImage;
+    const image = desktopImage && desktopImage.src ? desktopImage : mobileImage;
+    
+    if (!image || !image.src) {
+        alert('لا يمكن تحميل الصورة');
+        return false;
+    }
+    
+    // Simple direct download
+    const link = document.createElement('a');
+    link.href = image.src;
+    link.download = `saudi-national-day-mood-${Date.now()}.png`;
+    link.style.display = 'none';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    showDownloadSuccess();
+    return false;
+}
+
+// Direct link download fallback
+function downloadDirectLink(imageSrc) {
+    hideDownloadProgress();
+    
+    // Extract file extension from source
+    const extension = imageSrc.split('.').pop().toLowerCase();
+    const validExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
+    const fileExt = validExtensions.includes(extension) ? extension : 'png';
+    
+    const link = document.createElement('a');
+    link.href = imageSrc;
+    link.download = `saudi-national-day-mood-${Date.now()}.${fileExt}`;
+    link.style.display = 'none';
+    link.style.position = 'absolute';
+    link.style.left = '-9999px';
+    
+    document.body.appendChild(link);
     
     try {
-        // Convert image to blob for proper download
-        const response = await fetch(image.src);
-        const blob = await response.blob();
-        
-        // Create download link with blob
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `spimaco-mood-${Date.now()}.png`;
-        document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link);
-        
-        // Clean up the blob URL
-        URL.revokeObjectURL(link.href);
-    } catch (error) {
-        // Fallback to simple download
-        const link = document.createElement('a');
-        link.href = image.src;
-        link.download = `spimaco-mood-${Date.now()}.png`;
-        link.target = '_blank';
-        link.click();
+        showDownloadSuccess();
+    } catch (clickError) {
+        // Last resort - show instructions for manual download
+        alert('لتحميل الصورة: انقر بالزر الأيمن على الصورة واختر "حفظ الصورة باسم"');
     }
+    
+    setTimeout(() => {
+        if (link.parentNode) {
+            document.body.removeChild(link);
+        }
+    }, 100);
+}
+
+// Show download progress indicator
+function showDownloadProgress() {
+    // Remove any existing indicators
+    const existingIndicators = document.querySelectorAll('.download-progress-indicator');
+    existingIndicators.forEach(indicator => indicator.remove());
+    
+    const indicator = document.createElement('div');
+    indicator.className = 'download-progress-indicator';
+    indicator.textContent = 'جاري تحميل الصورة... ⏳';
+    indicator.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 138, 74, 0.7);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-family: 'Cairo', sans-serif;
+        font-weight: 600;
+        z-index: 99999;
+        animation: slideInDown 0.3s ease-out;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        pointer-events: none;
+    `;
+    
+    document.body.appendChild(indicator);
+}
+
+// Hide download progress indicator
+function hideDownloadProgress() {
+    const indicators = document.querySelectorAll('.download-progress-indicator');
+    indicators.forEach(indicator => {
+        if (indicator.parentNode) {
+            indicator.style.animation = 'slideOutUp 0.3s ease-in';
+            setTimeout(() => {
+                if (indicator.parentNode) {
+                    document.body.removeChild(indicator);
+                }
+            }, 300);
+        }
+    });
+}
+
+// Show download success indicator
+function showDownloadSuccess() {
+    // Remove any existing indicators
+    const existingIndicators = document.querySelectorAll('.download-success-indicator');
+    existingIndicators.forEach(indicator => indicator.remove());
+    
+    // Create success message
+    const indicator = document.createElement('div');
+    indicator.className = 'download-success-indicator';
+    indicator.textContent = 'تم تحميل النشرة بنجاح! ✅';
+    indicator.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 138, 74, 0.9);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-family: 'Cairo', sans-serif;
+        font-weight: 600;
+        z-index: 99999;
+        animation: slideInDown 0.3s ease-out;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        pointer-events: none;
+    `;
+    
+    document.body.appendChild(indicator);
+    
+    // Remove after 4 seconds
+    setTimeout(() => {
+        if (indicator && indicator.parentNode) {
+            indicator.style.animation = 'slideOutUp 0.3s ease-in';
+            setTimeout(() => {
+                if (indicator.parentNode) {
+                    document.body.removeChild(indicator);
+                }
+            }, 300);
+        }
+    }, 4000);
 }
 
 // Share image - handle both modal types

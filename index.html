@@ -174,7 +174,7 @@
             <!-- Controls sidebar -->
             <div class="modal-controls-desktop">
                 <button class="close-btn-desktop" onclick="closeModal()">×</button>
-                <button class="action-btn-desktop" onclick="saveImage()">
+                <button class="action-btn-desktop" onclick="event.stopPropagation(); event.preventDefault(); saveImage(event); return false;">
                     <span>حمل النشرة</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
@@ -200,7 +200,7 @@
             
             <!-- Action buttons -->
             <div class="modal-actions-mobile">
-                <button class="action-btn-mobile" onclick="saveImage()">
+                <button class="action-btn-mobile" onclick="event.stopPropagation(); event.preventDefault(); saveImage(event); return false;">
                     <span>حمل النشرة</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
@@ -210,10 +210,6 @@
         </div>
     </div>
     
-    <!-- Background Footer -->
-    <div class="bg-footer">
-        <img src="BackgroundElements/footer.svg" alt="Footer Background" class="bg-footer-image">
-    </div>
     
     <script src="script.js"></script>
 </body>

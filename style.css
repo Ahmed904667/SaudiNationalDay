@@ -10,9 +10,20 @@
 body {
     font-family: 'Cairo', sans-serif;
     background-color: #008a4a; /* Saudi green fallback color */
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-image: 
+        url('BackgroundElements/footer.svg');
+    background-size: 
+        100% 120px,
+        cover;
+    background-position: 
+        center calc(100% + 40px),
+        center;
+    background-repeat: 
+        no-repeat,
+        no-repeat;
+    background-attachment: 
+        scroll,
+        fixed;
     min-height: 100vh;
     min-height: 100dvh; /* Dynamic viewport height for mobile */
     color: white;
@@ -48,25 +59,6 @@ body {
     
 }
 
-/* Background Footer */
-.bg-footer {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    height: 120px;
-    z-index: -999;
-    overflow: hidden;
-}
-
-.bg-footer-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center bottom;
-    opacity: 0.9;
-    mix-blend-mode: multiply;
-}
 
 /* Header */
 .header {
@@ -134,11 +126,12 @@ body {
     padding: 20px;
     padding-top: 40px;
     /* Account for mobile toolbars */
-    padding-bottom: calc(60px + env(safe-area-inset-bottom));
+    padding-bottom: calc(200px + env(safe-area-inset-bottom));
     position: relative;
     overflow-y: auto;
     width: 100%;
     z-index: 1;
+    isolation: isolate;
 }
 
 .card {
@@ -157,22 +150,23 @@ body {
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     position: relative;
     margin: 0 auto 40px auto;
-    transform: scale(0.8);
+    transform: scale(0.8) translateZ(0);
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     opacity: 0;
     filter: blur(10px);
-    z-index: 10;
+    z-index: 100;
     overflow: visible;
     display: none;
     flex-direction: column;
     justify-content: flex-start;
+    will-change: transform;
 }
 
 .card.active {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
     filter: blur(0px);
-    z-index: 20;
+    z-index: 200;
     display: flex;
 }
 
@@ -187,16 +181,16 @@ body {
 
 .card.switching {
     opacity: 0.8;
-    transform: scale(1.05);
+    transform: scale(1.05) translateZ(0);
     filter: blur(5px);
-    z-index: 15;
+    z-index: 150;
 }
 
 .card.initial-load {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
     filter: blur(0px);
-    z-index: 20;
+    z-index: 200;
     animation: cardPopIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
     display: flex;
 }
@@ -262,12 +256,13 @@ body {
 }
 
 .card:hover {
-    transform: translateY(-3px) scale(1.01);
+    transform: translateY(-3px) scale(1.01) translateZ(0);
     filter: blur(0px);
     box-shadow: 
         0 35px 70px rgba(0, 0, 0, 0.6),
         0 15px 25px rgba(0, 0, 0, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    z-index: 250;
 }
 
 .title {
@@ -1009,20 +1004,42 @@ body {
     }
 }
 
-.modal-loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(8px);
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+@keyframes slideInDown {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
 }
+
+@keyframes slideOutUp {
+    0% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-30px);
+    }
+}
+
+    .modal-loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1001;
+    }
 
 
 .modal-actions {
@@ -1176,6 +1193,18 @@ body {
 /* Mobile Modal Styles (768px and below) */
 .modal-mobile {
     display: none;
+}
+
+.modal-mobile.show {
+    overflow: hidden;
+}
+
+/* Prevent body scroll when mobile modal is open */
+body.modal-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
 @media (max-width: 768px) {
